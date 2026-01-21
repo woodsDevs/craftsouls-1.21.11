@@ -1,0 +1,13 @@
+{
+  "itemGroup.craftsouls": "Example Mod Tab",
+  "block.craftsouls.example_block": "Example Block",
+  "item.craftsouls.example_item": "Example Item",
+
+  "craftsouls.configuration.title": "craftsouls Configs",
+  "craftsouls.configuration.section.craftsouls.common.toml": "craftsouls Configs",
+  "craftsouls.configuration.section.craftsouls.common.toml.title": "craftsouls Configs",
+  "craftsouls.configuration.items": "Item List",
+  "craftsouls.configuration.logDirtBlock": "Log Dirt Block",
+  "craftsouls.configuration.magicNumberIntroduction": "Magic Number Text",
+  "craftsouls.configuration.magicNumber": "Magic Number"
+}
