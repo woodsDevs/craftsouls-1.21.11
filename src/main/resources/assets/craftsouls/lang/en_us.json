@@ -9,5 +9,9 @@
   "craftsouls.configuration.items": "Item List",
   "craftsouls.configuration.logDirtBlock": "Log Dirt Block",
   "craftsouls.configuration.magicNumberIntroduction": "Magic Number Text",
-  "craftsouls.configuration.magicNumber": "Magic Number"
+  "craftsouls.configuration.magicNumber": "Magic Number",
+
+  "entity.craftsouls.pinwheel": "Pinwheel",
+  "entity.craftsouls.sif": "Sif"
+
 }

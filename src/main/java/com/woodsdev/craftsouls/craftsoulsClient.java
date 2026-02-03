@@ -1,6 +1,10 @@
 package com.woodsdev.craftsouls;
 
+import com.woodsdev.craftsouls.entity.ModEntities;
+import com.woodsdev.craftsouls.entity.client.PinwheelRenderer;
+import com.woodsdev.craftsouls.entity.client.SifRenderer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -9,6 +13,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+
+import javax.swing.text.html.parser.Entity;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = craftsouls.MODID, dist = Dist.CLIENT)
@@ -27,5 +33,7 @@ public class craftsoulsClient {
         // Some client setup code
         craftsouls.LOGGER.info("HELLO FROM CLIENT SETUP");
         craftsouls.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        EntityRenderers.register(ModEntities.PINWHEEL.get(), PinwheelRenderer::new);
+        EntityRenderers.register(ModEntities.SIF.get(), SifRenderer::new);
     }
 }
