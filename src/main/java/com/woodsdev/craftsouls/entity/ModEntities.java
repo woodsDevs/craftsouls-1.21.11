@@ -28,7 +28,7 @@ public class ModEntities {
                     Identifier.fromNamespaceAndPath("craftsouls","pinwheel"))));
 
     public static final Supplier<EntityType<SifEntity>> SIF = ENTITY_TYPES.register("sif",
-            () -> EntityType.Builder.of(SifEntity::new, MobCategory.MONSTER).sized(1.0f,2.5f).build(ResourceKey.create(
+            () -> EntityType.Builder.of(SifEntity::new, MobCategory.MONSTER).sized(4.5f,10.0f).build(ResourceKey.create(
                     Registries.ENTITY_TYPE,
                     Identifier.fromNamespaceAndPath("craftsouls","sif"))));
 

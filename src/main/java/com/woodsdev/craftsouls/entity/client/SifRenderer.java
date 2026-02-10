@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.Identifier;
 
 public class SifRenderer extends MobRenderer<SifEntity, SifEntityRenderState, SifModel> {
-    private static final Identifier SIF_LOCATION = Identifier.fromNamespaceAndPath("craftsouls", "sif");
+    private static final Identifier SIF_LOCATION = Identifier.fromNamespaceAndPath("craftsouls", "textures/entity/sif/sif.png");
 
     public SifRenderer(EntityRendererProvider.Context context) {
         super(context, new SifModel(context.bakeLayer(SifModel.LAYER_LOCATION)), 0.25F);
@@ -25,6 +25,10 @@ public class SifRenderer extends MobRenderer<SifEntity, SifEntityRenderState, Si
     @Override
     public void extractRenderState(SifEntity entity, SifEntityRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
+        state.ageInTicks = entity.tickCount + partialTick;
+        state.setAttacking(entity.getAttacking());
+        state.walking = entity.isWalking();
+
     }
 
 }

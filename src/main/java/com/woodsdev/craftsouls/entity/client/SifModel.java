@@ -2,18 +2,31 @@ package com.woodsdev.craftsouls.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.animation.KeyframeAnimation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.Entity;
 
 public class SifModel extends EntityModel<SifEntityRenderState> {
 
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Identifier.fromNamespaceAndPath("modid","sif"), "main");
+
+    private final AnimationState idleAnimationState = new AnimationState();
+    private final AnimationState attackingAnimationState = new AnimationState();
+    private final AnimationState walkAnimationState = new AnimationState();
+
+    private boolean wasAttacking = false;
+
+    private final KeyframeAnimation idleAnimation;
+    private final KeyframeAnimation attackingAnimation;
+    private final KeyframeAnimation walkAnimation;
+
     private final ModelPart head;
     private final ModelPart sword;
     private final ModelPart mane;
@@ -35,6 +48,10 @@ public class SifModel extends EntityModel<SifEntityRenderState> {
         this.leg3 = root.getChild("leg3");
         this.leg4 = root.getChild("leg4");
         this.tail = root.getChild("tail");
+
+        this.idleAnimation = SifAnimations.ANIM_IDLE_SIF.bake(root);
+        this.attackingAnimation = SifAnimations.ANIM_ATTACK_SIF.bake(root);
+        this.walkAnimation = SifAnimations.ANIM_WALK_SIF.bake(root);
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -77,6 +94,51 @@ public class SifModel extends EntityModel<SifEntityRenderState> {
     @Override
     public void setupAnim(SifEntityRenderState state) {
         super.setupAnim(state);
+        boolean attacking = state.isAttacking();
+        boolean walking = state.walking;
+
+        // attack start
+        if (attacking && !wasAttacking) {
+            attackingAnimationState.stop();
+            attackingAnimationState.start((int) state.ageInTicks);
+
+            walkAnimationState.stop();
+            idleAnimationState.stop();
+        }
+
+        // attack end, back to idle
+        if (!attacking && wasAttacking) {
+            attackingAnimationState.stop();
+            idleAnimationState.start((int) state.ageInTicks);
+        }
+
+        // walk start
+        if (walking && !attacking) {
+            if (!walkAnimationState.isStarted()) {
+                walkAnimationState.start((int) state.ageInTicks);
+                idleAnimationState.stop();
+            }
+        }
+
+        // idle start
+        if (!walking && !attacking) {
+            if (!idleAnimationState.isStarted()) {
+                idleAnimationState.start((int) state.ageInTicks);
+                walkAnimationState.stop();
+            }
+        }
+
+        // apply
+        if (attacking) {
+            attackingAnimation.apply(attackingAnimationState, state.ageInTicks, 2.0f);
+        } else if (walking) {
+            walkAnimation.apply(walkAnimationState, state.ageInTicks, 0.7f);
+        } else {
+            idleAnimation.apply(idleAnimationState, state.ageInTicks, 1.0f);
+        }
+
+        wasAttacking = attacking;
+
 
     }
 
