@@ -1,6 +1,7 @@
 package com.woodsdev.craftsouls.entity.custom;
 
 import com.sun.jna.platform.win32.WinDef;
+import com.woodsdev.craftsouls.entity.ModEntities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -8,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -30,6 +32,8 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 
 public class PinwheelEntity extends Monster implements Enemy {
+    private boolean phaseTwoTriggered = false;
+    private boolean isClone = false;
 
     private static final EntityDataAccessor<Boolean> DATA_ATTACKING =
             SynchedEntityData.defineId(PinwheelEntity.class, EntityDataSerializers.BOOLEAN);
@@ -49,6 +53,7 @@ public class PinwheelEntity extends Monster implements Enemy {
     }
 
     protected void registerGoals(){
+        if (isClone) return; // clones have no AI
         this.goalSelector.addGoal(1, new LookAtPlayerGoal(this,Player.class,60));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class,true,true));
         this.goalSelector.addGoal(6, new FireballGoal(this));
@@ -66,6 +71,11 @@ public class PinwheelEntity extends Monster implements Enemy {
 
     public void setCharging(boolean charging) {
         this.entityData.set(DATA_IS_CHARGING, charging);
+    }
+
+    //clone setter
+    public void setClone(boolean clone) {
+        this.isClone = clone;
     }
 
     public boolean isAttacking() {
@@ -92,6 +102,32 @@ public class PinwheelEntity extends Monster implements Enemy {
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
+        if (this.isClone) {
+
+            // Smoke burst on vanish
+            level.sendParticles(
+                    net.minecraft.core.particles.ParticleTypes.LARGE_SMOKE,
+                    this.getX(),
+                    this.getY() + 1,
+                    this.getZ(),
+                    30,
+                    0.6,
+                    0.6,
+                    0.6,
+                    0.03
+            );
+
+            // Sound
+            this.playSound(
+                    net.minecraft.sounds.SoundEvents.ILLUSIONER_MIRROR_MOVE,
+                    1.0F,
+                    1.0F
+            );
+
+            this.discard(); // instantly remove clone
+            return true;
+        }
+
         return super.hurtServer(level, damageSource, amount);
     }
 
@@ -105,8 +141,64 @@ public class PinwheelEntity extends Monster implements Enemy {
 
         if (!this.level().isClientSide()) {
             this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+
+            // Phase 2 trigger
+            if (!phaseTwoTriggered && !isClone &&
+                    this.getHealth() <= this.getMaxHealth() / 2f) {
+
+                phaseTwoTriggered = true;
+                summonClones();
+            }
         }
     }
+    //summon clones
+
+    private void summonClones() {
+
+        if (!(this.level() instanceof ServerLevel serverLevel)) return;
+
+        for (int i = 0; i < 3; i++) {
+
+            PinwheelEntity clone = (PinwheelEntity) this.getType().create(
+                    serverLevel,
+                    EntitySpawnReason.MOB_SUMMONED
+            );
+
+            if (clone != null) {
+
+
+                double offsetX = this.getX() + (this.random.nextDouble() - 0.5) * 4;
+                double offsetZ = this.getZ() + (this.random.nextDouble() - 0.5) * 4;
+
+                clone.setPos(offsetX, this.getY(), offsetZ);
+                clone.setYRot(this.getYRot());
+                clone.setXRot(this.getXRot());
+
+                serverLevel.sendParticles(
+                        net.minecraft.core.particles.ParticleTypes.SMOKE,
+                        offsetX,
+                        this.getY() + 1,
+                        offsetZ,
+                        20,      // count
+                        0.5,     // x spread
+                        0.5,     // y spread
+                        0.5,     // z spread
+                        0.02     // speed
+                );
+                clone.playSound(
+                        SoundEvents.CREAKING_ACTIVATE,
+                        1.0F,
+                        1.0F
+                );
+
+                clone.setClone(true);
+                clone.setNoAi(true); // easiest way to make them do nothing
+
+                serverLevel.addFreshEntity(clone);
+            }
+        }
+    }
+
 
     static class FireballGoal extends Goal {
         private final PinwheelEntity pinwheel;

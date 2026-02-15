@@ -12,6 +12,8 @@
   "craftsouls.configuration.magicNumber": "Magic Number",
 
   "entity.craftsouls.pinwheel": "Pinwheel",
-  "entity.craftsouls.sif": "Sif"
+  "entity.craftsouls.sif": "Sif",
+  "entity.craftsouls.irongiant": "Iron Golem",
+  "entity.craftsouls.irongolemboss": "Iron Golem"
 
 }

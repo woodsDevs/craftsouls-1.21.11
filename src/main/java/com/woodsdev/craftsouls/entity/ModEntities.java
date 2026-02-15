@@ -1,6 +1,7 @@
 package com.woodsdev.craftsouls.entity;
 
 import com.woodsdev.craftsouls.craftsouls;
+import com.woodsdev.craftsouls.entity.custom.IronGolemBossEntity;
 import com.woodsdev.craftsouls.entity.custom.PinwheelEntity;
 import com.woodsdev.craftsouls.entity.custom.SifEntity;
 import net.minecraft.core.registries.Registries;
@@ -31,6 +32,12 @@ public class ModEntities {
             () -> EntityType.Builder.of(SifEntity::new, MobCategory.MONSTER).sized(4.5f,10.0f).build(ResourceKey.create(
                     Registries.ENTITY_TYPE,
                     Identifier.fromNamespaceAndPath("craftsouls","sif"))));
+
+    public static final Supplier<EntityType<IronGolemBossEntity>> IRONGOLEMBOSS = ENTITY_TYPES.register("irongolemboss",
+            () -> EntityType.Builder.of(IronGolemBossEntity::new, MobCategory.MONSTER).sized(2f,15f).build(ResourceKey.create(
+                    Registries.ENTITY_TYPE,
+                    Identifier.fromNamespaceAndPath("craftsouls","irongolemboss"))));
+
 
     //register
     public static void register(IEventBus eventBus) {

@@ -186,20 +186,22 @@ public class PinwheelModel extends EntityModel<PinwheelEntityRenderState> {
         super.setupAnim(state);
 
         boolean attacking = state.isAttacking();
+        // START idle if not started yet
+        if (!idleAnimationState.isStarted() && !attacking) {
+            idleAnimationState.start((int) state.ageInTicks);
+        }
 
         // ATTACK JUST STARTED
         if (attacking && !wasAttacking) {
             attackAnimationState.stop(); // hard reset
             attackAnimationState.start((int) state.ageInTicks);
             idleAnimationState.stop();
-            System.out.println("ATTACK START");
         }
 
         // ATTACK JUST ENDED
         if (!attacking && wasAttacking) {
             attackAnimationState.stop();
             idleAnimationState.start((int) state.ageInTicks);
-            System.out.println("IDLE START");
         }
 
         // APPLY

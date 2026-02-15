@@ -1,6 +1,7 @@
 package com.woodsdev.craftsouls;
 
 import com.woodsdev.craftsouls.entity.ModEntities;
+import com.woodsdev.craftsouls.entity.client.IronGolemBossRenderer;
 import com.woodsdev.craftsouls.entity.client.PinwheelRenderer;
 import com.woodsdev.craftsouls.entity.client.SifRenderer;
 import net.minecraft.client.Minecraft;
@@ -35,5 +36,6 @@ public class craftsoulsClient {
         craftsouls.LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         EntityRenderers.register(ModEntities.PINWHEEL.get(), PinwheelRenderer::new);
         EntityRenderers.register(ModEntities.SIF.get(), SifRenderer::new);
+        EntityRenderers.register(ModEntities.IRONGOLEMBOSS.get(), IronGolemBossRenderer::new);
     }
 }
