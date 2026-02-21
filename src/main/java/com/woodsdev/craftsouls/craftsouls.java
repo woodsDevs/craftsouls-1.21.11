@@ -29,12 +29,14 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import software.bernie.geckolib.GeckoLib;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(craftsouls.MODID)
 public class craftsouls {
     // Define mod id in a common place for everything to reference
     public static final String MODID = "craftsouls";
+
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -42,6 +44,8 @@ public class craftsouls {
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public craftsouls(IEventBus modEventBus, ModContainer modContainer) {
+        //geckolib
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -60,7 +64,8 @@ public class craftsouls {
         //regiseter stamina
         NeoForge.EVENT_BUS.register(new StaminaEvents());
         //registar network
-        modEventBus.register(CraftSoulsNetwork.class);
+        modEventBus.addListener(this::registerPayloads);
+
 
         if (FMLEnvironment.getDist().isClient()) {
             // register mod bus events (key registration)

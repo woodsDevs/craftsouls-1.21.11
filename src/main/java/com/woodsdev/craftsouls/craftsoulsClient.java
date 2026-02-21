@@ -4,6 +4,7 @@ import com.woodsdev.craftsouls.entity.ModEntities;
 import com.woodsdev.craftsouls.entity.client.IronGolemBossRenderer;
 import com.woodsdev.craftsouls.entity.client.PinwheelRenderer;
 import com.woodsdev.craftsouls.entity.client.SifRenderer;
+import com.woodsdev.craftsouls.entity.client.anim.PlayerAnimatable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
@@ -14,6 +15,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import software.bernie.geckolib.renderer.GeoReplacedEntityRenderer;
 
 import javax.swing.text.html.parser.Entity;
 

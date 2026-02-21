@@ -15,7 +15,8 @@ public class StaminaOverlay {
         Player player = mc.player;
 
         if (player == null) return;
-    /*
+        if (mc.options.hideGui) return;//hide on f1
+
         // read stamina from persistent data
         int stamina = player.getPersistentData()
                 .getInt("craftsouls_stamina")
@@ -47,7 +48,7 @@ public class StaminaOverlay {
                 x, y,
                 x + filled, y + height,
                 0xFF2EFF00,
-                0xFF0B5F00
+                0x00AA00
         );
 
         // Low stamina pulse
@@ -56,7 +57,7 @@ public class StaminaOverlay {
             int red = (int)(200 + 55 * pulse);
             gui.fill(x, y, x + filled, y + height, (0xFF << 24) | (red << 16));
         }
- */
+
 
     }
 }

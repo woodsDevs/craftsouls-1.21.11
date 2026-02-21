@@ -1,5 +1,6 @@
 package com.woodsdev.craftsouls.entity.custom;
 
+import com.woodsdev.craftsouls.entity.ai.SifLeapAttackGoal;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -7,6 +8,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.entity.Entity;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
@@ -31,11 +34,14 @@ public class SifEntity extends Monster implements Enemy {
 
     public SifEntity(EntityType<? extends SifEntity> entityType, Level level) {
         super(entityType, level);
+        this.setPersistenceRequired();
     }
 
     public void registerGoals(){
-        this.goalSelector.addGoal(1, new LookAtPlayerGoal(this, Player.class,8.0F));
-        this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 1.0D, 16.0F));
+        this.goalSelector.addGoal(1, new SifLeapAttackGoal(this));
+        this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 1.0D, 25.0F));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Player.class,8.0F));
+
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
@@ -53,7 +59,11 @@ public class SifEntity extends Monster implements Enemy {
         builder.define(WALKING, false);
 
     }
-
+    //fix spawn
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);
     }
@@ -68,7 +78,7 @@ public class SifEntity extends Monster implements Enemy {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 40.0D)
+                .add(Attributes.MAX_HEALTH, 100.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.FOLLOW_RANGE, 16.0D)
                 .add(Attributes.ATTACK_DAMAGE,100.0D);
@@ -104,6 +114,14 @@ public class SifEntity extends Monster implements Enemy {
                 // HIT FRAME
                 if (attackCooldown == ATTACK_LENGTH - DAMAGE_FRAME) {
                     doAttackHit();
+                    level().playSound(
+                            null,
+                            this.blockPosition(),
+                            SoundEvents.ROOTS_HIT,
+                            this.getSoundSource(),
+                            1.0F,
+                            0.8F
+                    );
                 }
             }
 

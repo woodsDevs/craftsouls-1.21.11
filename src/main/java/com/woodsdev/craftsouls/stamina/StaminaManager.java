@@ -37,7 +37,7 @@ public class StaminaManager {
         set(player, stamina);
 
         // set regen delay (20 ticks = 1 second)
-        player.getPersistentData().putInt(REGEN_DELAY, 60);
+        player.getPersistentData().putInt(REGEN_DELAY, 100);
 
         sync(player);
     }

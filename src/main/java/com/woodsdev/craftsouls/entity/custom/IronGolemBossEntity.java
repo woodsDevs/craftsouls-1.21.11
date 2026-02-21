@@ -81,7 +81,10 @@ public class IronGolemBossEntity extends Monster implements Enemy {
 
 
 
-    public IronGolemBossEntity(EntityType<? extends IronGolemBossEntity> entityType, Level level) {super(entityType, level);}
+    public IronGolemBossEntity(EntityType<? extends IronGolemBossEntity> entityType, Level level) {
+        super(entityType, level);
+        this.setPersistenceRequired();
+    }
 
     protected void registerGoals(){
         //custom goals
@@ -96,9 +99,13 @@ public class IronGolemBossEntity extends Monster implements Enemy {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 100.0D).add(Attributes.MOVEMENT_SPEED, 0.1D).add(Attributes.FOLLOW_RANGE, 30.0D).add(Attributes.ATTACK_DAMAGE,10.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 200.0D).add(Attributes.MOVEMENT_SPEED, 0.1D).add(Attributes.FOLLOW_RANGE, 30.0D).add(Attributes.ATTACK_DAMAGE,10.0D);
     }
-
+    //fix spawn
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
     // See the Data and Networking article for information about these methods.
     @Override
     protected void readAdditionalSaveData(ValueInput input) {}

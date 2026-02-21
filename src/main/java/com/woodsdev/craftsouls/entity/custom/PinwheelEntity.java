@@ -50,6 +50,8 @@ public class PinwheelEntity extends Monster implements Enemy {
     // The bound is needed for registration below, so we add it here.
     public PinwheelEntity(EntityType<? extends PinwheelEntity> entityType, Level level) {
         super(entityType, level);
+        this.setPersistenceRequired();
+
     }
 
     protected void registerGoals(){
@@ -63,6 +65,11 @@ public class PinwheelEntity extends Monster implements Enemy {
     public void addConstantEffect(LivingEntity entity){
         entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING,999999,5,false,false));
         entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE,999999,5,false,false));
+    }
+    //fix spawn
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
     }
 
     public boolean isCharging() {
@@ -83,7 +90,7 @@ public class PinwheelEntity extends Monster implements Enemy {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 20.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 16.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 60.0D).add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, 16.0D);
     }
     // See the Data and Networking article for information about these methods.
     @Override
