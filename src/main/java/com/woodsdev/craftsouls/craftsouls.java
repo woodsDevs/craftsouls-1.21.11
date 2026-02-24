@@ -1,10 +1,8 @@
 package com.woodsdev.craftsouls;
 
-import com.woodsdev.craftsouls.client.DodgeKeyHandler;
 import com.woodsdev.craftsouls.client.DodgeKeyRegister;
 import com.woodsdev.craftsouls.entity.ModEntities;
 import com.woodsdev.craftsouls.event.ModEventBusEvents;
-import com.woodsdev.craftsouls.network.CraftSoulsNetwork;
 import com.woodsdev.craftsouls.network.DodgePayload;
 import com.woodsdev.craftsouls.network.SyncStaminaPayload;
 import com.woodsdev.craftsouls.stamina.StaminaEvents;
@@ -29,7 +27,6 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
-import software.bernie.geckolib.GeckoLib;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(craftsouls.MODID)
@@ -127,5 +124,6 @@ public class craftsouls {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
+
     
 }

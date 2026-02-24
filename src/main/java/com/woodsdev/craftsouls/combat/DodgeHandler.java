@@ -2,7 +2,9 @@ package com.woodsdev.craftsouls.combat;
 
 import com.woodsdev.craftsouls.client.DodgeAnimationHandler;
 import com.woodsdev.craftsouls.stamina.StaminaManager;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -45,7 +47,7 @@ public class DodgeHandler {
         Vec3 dash = left ? right.scale(-1.2) : right.scale(1.2);
 
         player.setDeltaMovement(
-                player.getDeltaMovement().add(dash.x, 0.25, dash.z)
+                player.getDeltaMovement().add(dash.x, 0.2, dash.z)
         );
 
         player.hurtMarked = true;
@@ -53,7 +55,7 @@ public class DodgeHandler {
         // give i frames
         player.invulnerableTime = 15;
         // Trigger animation
-        DodgeAnimationHandler.startDodge();
+        DodgeAnimationHandler.startDodge(left);
     }
 
     @SubscribeEvent

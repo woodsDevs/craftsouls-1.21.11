@@ -6,6 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -16,7 +19,7 @@ public class DodgeKeyHandler {
 
     @SubscribeEvent
     public void onClientTick(ClientTickEvent.Post event) {
-        DodgeAnimationHandler.tick(); // add this static method
+       DodgeAnimationHandler.tick(); // add this static method
         Player player = Minecraft.getInstance().player;
         if (Minecraft.getInstance().player == null) return;
         //if dodge toggle is true, change boolean
@@ -31,14 +34,12 @@ public class DodgeKeyHandler {
                 System.out.println("dodge left pressed");
                 Minecraft.getInstance().getConnection().send(new DodgePayload(true));
                 //dodge left
-
             }
 
             while (DodgeKeyRegister.dodgeRight.consumeClick()) {
                 System.out.println("dodge right pressed");
                 Minecraft.getInstance().getConnection().send(new DodgePayload(false));
                 //dodge right
-
             }
         }
     }

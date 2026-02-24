@@ -4,7 +4,6 @@ import com.woodsdev.craftsouls.entity.ModEntities;
 import com.woodsdev.craftsouls.entity.client.IronGolemBossRenderer;
 import com.woodsdev.craftsouls.entity.client.PinwheelRenderer;
 import com.woodsdev.craftsouls.entity.client.SifRenderer;
-import com.woodsdev.craftsouls.entity.client.anim.PlayerAnimatable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.neoforged.api.distmarker.Dist;
@@ -15,9 +14,6 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import software.bernie.geckolib.renderer.GeoReplacedEntityRenderer;
-
-import javax.swing.text.html.parser.Entity;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
 @Mod(value = craftsouls.MODID, dist = Dist.CLIENT)
@@ -30,7 +26,6 @@ public class craftsoulsClient {
         // Do not forget to add translations for your config options to the en_us.json file.
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
     }
-
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
@@ -39,5 +34,8 @@ public class craftsoulsClient {
         EntityRenderers.register(ModEntities.PINWHEEL.get(), PinwheelRenderer::new);
         EntityRenderers.register(ModEntities.SIF.get(), SifRenderer::new);
         EntityRenderers.register(ModEntities.IRONGOLEMBOSS.get(), IronGolemBossRenderer::new);
+
+
     }
+
 }
