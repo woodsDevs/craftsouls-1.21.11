@@ -3,6 +3,7 @@ package com.woodsdev.craftsouls;
 import com.woodsdev.craftsouls.client.DodgeKeyRegister;
 import com.woodsdev.craftsouls.entity.ModEntities;
 import com.woodsdev.craftsouls.event.ModEventBusEvents;
+import com.woodsdev.craftsouls.item.ModItems;
 import com.woodsdev.craftsouls.network.DodgePayload;
 import com.woodsdev.craftsouls.network.SyncStaminaPayload;
 import com.woodsdev.craftsouls.stamina.StaminaEvents;
@@ -62,7 +63,8 @@ public class craftsouls {
         NeoForge.EVENT_BUS.register(new StaminaEvents());
         //registar network
         modEventBus.addListener(this::registerPayloads);
-
+        //register items
+        ModItems.ITEMS.register(modEventBus);
 
         if (FMLEnvironment.getDist().isClient()) {
             // register mod bus events (key registration)
